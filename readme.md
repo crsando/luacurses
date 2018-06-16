@@ -9,7 +9,7 @@ These instructions will get you a copy of luacurses up and running on your local
 ### Prerequisites
 
 In order to build luacurses you will need the following:
-- A C compiler (GCC is recommended)
+- C compiler (GCC is recommended)
 - Make
 - Lua 3.5.2 (or later) and the associated headers
 - (N)curses and the associated headers
