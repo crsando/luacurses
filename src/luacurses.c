@@ -84,10 +84,10 @@ int l_screen_readline(lua_State *L) {
     for(int i = 0; i < 256; i++) {
         int ch = wgetch(ctx->window);
         if(ch < 0 || ch == '\n') {
-            buf[n] = 0;
+            buf[i] = 0;
             break;
         }
-        buf[n] = (char) ch;
+        buf[i] = (char) ch;
     }
     lua_pushstring(L, buf);
 
