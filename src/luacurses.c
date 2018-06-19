@@ -89,7 +89,7 @@ int l_screen_iscolor(lua_State *L) {
     assert(lua_isuserdata(L, 1));
     ctx = lua_touserdata(L, 1);
 
-    lua_pushboolean(ctx->colors);
+    lua_pushboolean(L, ctx->colors);
 
     return 1;
 }
