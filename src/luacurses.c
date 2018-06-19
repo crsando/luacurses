@@ -38,7 +38,7 @@ int l_screen_read(lua_State *L) {
 
     assert(lua_isuserdata(L, 1));
     ctx = lua_touserdata(L, 1);
-    n = luaL_tointeger(L, 2);
+    n = luaL_checkinteger(L, 2);
     blocking = lua_asboolean(L, 3);
 
     nodelay(ctx->window, !blocking);
@@ -64,7 +64,7 @@ int l_screen_readline(lua_State *L) {
 
     assert(lua_isuserdata(L, 1));
     ctx = lua_touserdata(L, 1);
-    n = luaL_tointeger(L, 2);
+    n = luaL_checkinteger(L, 2);
     blocking = lua_asboolean(L, 3);
 
     nodelay(ctx->window, !blocking);
