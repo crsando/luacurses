@@ -67,12 +67,7 @@ int l_screen_readline(lua_State *L) {
     n = luaL_tointeger(L, 2);
     blocking = lua_asboolean(L, 3);
 
-    if(blocking) {
-        delay();
-    }
-    else {
-        nodelay();
-    }
+    nodelay(ctx->window, !blocking)
 
     char buf[n];
     for(int i = 0; i < n; i++) {
