@@ -81,3 +81,5 @@ local curses = {
     Screen = Screen,
     colors = colors
 }
+
+return curses
