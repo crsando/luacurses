@@ -167,9 +167,9 @@ int l_screen_write(lua_State *L) {
     bg = luaL_checkinteger(L, 4);
 
     init_pair(pair, colors[fg], colors[bg]);
-    wattron(ctx->window, pair);
+    wattron(ctx->window, COLOR_PAIR(pair));
     waddstr(ctx->window, str);
-    wattroff(ctx->window, pair);
+    wattroff(ctx->window, COLOR_PAIR(pair));
     pair++;
 
     return 0;
