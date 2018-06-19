@@ -17,7 +17,9 @@ typedef struct {
     bool    colors;
 } _screen_ctx_t;
 
-static const int COLORS[] = {
+int pair = 1;
+
+static const int colors[] = {
     COLOR_BLACK,
     COLOR_RED,
     COLOR_GREEN,
@@ -164,10 +166,11 @@ int l_screen_write(lua_State *L) {
     fg = luaL_checkinteger(L, 3);
     bg = luaL_checkinteger(L, 4);
 
-    init_pair(1, COLORS[fg], COLORS[bg]);
-    wattron(ctx->window, 1);
+    init_pair(pair, colors[fg], colors[bg]);
+    wattron(ctx->window, pair);
     waddstr(ctx->window, str);
-    wattroff(ctx->window, 1);
+    wattroff(ctx->window, pair);
+    pair++;
 
     return 0;
 }
