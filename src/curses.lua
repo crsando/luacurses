@@ -46,8 +46,8 @@ function Screen:setcursor(x, y)
     c_curses.screen_setcursor(self.ctx, x, y)
 end
 
-function Screen:write(char, fg, bg)
-    c_curses.screen_write(self.ctx, fg, bg)
+function Screen:write(string, fg, bg)
+    c_curses.screen_write(self.ctx, string, fg, bg)
 end
 
 function Screen:clear()
