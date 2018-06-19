@@ -72,7 +72,6 @@ int l_screen_read(lua_State *L) {
 
 int l_screen_readline(lua_State *L) {
     _screen_ctx_t *ctx;
-    int n;
     bool blocking;
 
     assert(lua_isuserdata(L, 1));
@@ -81,8 +80,8 @@ int l_screen_readline(lua_State *L) {
 
     nodelay(ctx->window, !blocking);
 
-    char buf[n];
-    for(int i = 0; i < n; i++) {
+    char buf[256];
+    for(int i = 0; i < 256; i++) {
         int ch = wgetch(ctx->window);
         if(ch < 0 || ch == '\n') {
             buf[n] = 0;
