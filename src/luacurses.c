@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include <curses.h>
+#include <stdlib.h>
 
 #define MAX_LINE_LENGTH 1024
 
@@ -86,7 +87,7 @@ int l_screen_readline(lua_State *L) {
 
     nodelay(ctx->window, !blocking);
     buf = (char *) calloc(MAX_LINE_LENGTH, sizeof(*buf));
-    wgetcstr(ctx->window, buf);
+    wgetstr(ctx->window, buf);
 
     lua_pushstring(L, buf);
 
