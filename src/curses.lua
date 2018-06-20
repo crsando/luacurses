@@ -18,19 +18,17 @@ setmetatable(Screen, {
     end,
 })
 
--- TODO: Add logic to any functions that could have default arguments so that
--- for example you don't have to do Screen:write("Hello", colors.WHITE,
--- colors.BLACK) but simply Screen:write("Hello").
-
 function Screen:init()
     self.ctx = c_curses.screen_init();
 end
 
 function Screen:read(n, blocking)
+    if blocking == nil then blocking = true end
     return c_curses.screen_read(self.ctx, n, blocking)
 end
 
 function Screen:readline(blocking)
+    if blocking == nil then blocking = true end
     return c_curses.screen_readline(self.ctx, blocking)
 end
 
@@ -51,6 +49,8 @@ function Screen:setcursor(x, y)
 end
 
 function Screen:write(string, fg, bg)
+    fg = fg or colors.WHITE
+    bg = bg or colors.BLACK
     c_curses.screen_write(self.ctx, string, fg, bg)
 end
 
