@@ -49,8 +49,8 @@ function Screen:setcursor(x, y)
 end
 
 function Screen:write(string, fg, bg)
-    fg = fg or colors.WHITE
-    bg = bg or colors.BLACK
+    fg = fg or 7 -- TODO: Get rid of hard coded values here.
+    bg = bg or 0
     c_curses.screen_write(self.ctx, string, fg, bg)
 end
 
