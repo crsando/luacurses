@@ -12,11 +12,16 @@
 #include <assert.h>
 #include <curses.h>
 
+#define MAX_LINE_LENGTH 1024
+
 typedef struct {
     WINDOW *window;
     bool    colors;
 } _screen_ctx_t;
 
+// TODO: Remove this hacked way of doing colors and add proper color pairs to
+// improve portability on systems that don't support a large number of color
+// pairs.
 int pair = 1;
 
 static const int colors[] = {
@@ -73,22 +78,16 @@ int l_screen_read(lua_State *L) {
 int l_screen_readline(lua_State *L) {
     _screen_ctx_t *ctx;
     bool blocking;
+    char *buf;
 
     assert(lua_isuserdata(L, 1));
     ctx = lua_touserdata(L, 1);
     blocking = lua_toboolean(L, 2);
 
     nodelay(ctx->window, !blocking);
+    buf = (char *) calloc(MAX_LINE_LENGTH, sizeof(*buf));
+    wgetcstr(ctx->window, buf);
 
-    char buf[256];
-    for(int i = 0; i < 256; i++) {
-        int ch = wgetch(ctx->window);
-        if(ch < 0 || ch == '\n') {
-            buf[i] = 0;
-            break;
-        }
-        buf[i] = (char) ch;
-    }
     lua_pushstring(L, buf);
 
     return 1;
@@ -201,6 +200,8 @@ int l_screen_destroy(lua_State *L) {
     return 0;
 }
 
+// TODO: Add methods that allow configuring echo and other such properties of
+// the screen.
 static const struct luaL_Reg c_curses[] = {
     {"screen_init",         l_screen_init},
     {"screen_read",         l_screen_read},
