@@ -20,10 +20,6 @@ typedef struct {
     bool    colors;
 } _screen_ctx_t;
 
-typedef struct {
-    short id;
-} _color_pair_ctx_t;
-
 static const char *colorNames[] = {
     "COLOR_BLACK",
     "COLOR_RED",
@@ -167,16 +163,16 @@ int l_screen_setcursor(lua_State *L) {
 int l_screen_write(lua_State *L) {
     _screen_ctx_t *screen;
     const char *str;
-    _color_pair_ctx_t *color_pair;
+    short id;
 
     assert(lua_isuserdata(L, 1));
     screen = lua_touserdata(L, 1);
     str = luaL_checkstring(L, 2);
-    color_pair = lua_touserdata(L, 3);
+    id = (short) lua_touserdata(L, 3);
 
-    wattron(screen->window, COLOR_PAIR(color_pair->id));
+    wattron(screen->window, COLOR_PAIR(id));
     waddstr(screen->window, str);
-    wattroff(screen->window, COLOR_PAIR(color_pair->id));
+    wattroff(screen->window, COLOR_PAIR(id));
 
     return 0;
 }
