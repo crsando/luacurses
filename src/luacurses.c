@@ -210,18 +210,13 @@ int l_screen_destroy(lua_State *L) {
 }
 
 int l_color_pair_init(lua_State *L) {
-    _color_pair_ctx_t *ctx;
-    short fg;
-    short bg;
+    short id = (short) luaL_checkinteger(L, 1);
+    short fg = (short) luaL_checkinteger(L, 2);
+    short bg = (short) luaL_checkinteger(L, 3);
 
-    ctx = lua_newuserdata(L, sizeof(*ctx));
-    ctx->id = (short) luaL_checkinteger(L, 1);
-    fg = (short) luaL_checkinteger(L, 2);
-    bg = (short) luaL_checkinteger(L, 3);
+    init_pair(id, fg, bg);
 
-    init_pair(ctx->id, fg, bg);
-
-    return 1;
+    return 0;
 }
 
 // TODO: Add methods that allow configuring echo and other such properties of

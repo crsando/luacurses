@@ -7,6 +7,8 @@
 
 c_curses = require("c_curses")
 
+--------------------------------------------------------------------------------
+
 local Screen = {}
 Screen.__index = Screen
 
@@ -48,10 +50,8 @@ function Screen:setcursor(x, y)
     c_curses.screen_setcursor(self.ctx, x, y)
 end
 
-function Screen:write(string, fg, bg)
-    fg = fg or 7 -- TODO: Get rid of hard coded values here.
-    bg = bg or 0
-    c_curses.screen_write(self.ctx, string, fg, bg)
+function Screen:write(string, color_pair)
+    c_curses.screen_write(self.ctx, string, color_pair.id)
 end
 
 function Screen:clear()
@@ -66,25 +66,29 @@ function Screen:destroy()
     c_curses.screen_destroy()
 end
 
-----------------------------------------------
+--------------------------------------------------------------------------------
 
--- TODO: Move the color defs from lua to C.
-local colors = {
-    BLACK =     0,
-    RED =       1,
-    GREEN =     2,
-    YELLOW =    3,
-    BLUE =      4,
-    MAGENTA =   5,
-    CYAN =      6,
-    WHITE =     7
-}
+local ColorPair = {}
+ColorPair.__index = ColorPair
 
-----------------------------------------------
+setmetatable(ColorPair, {
+    __call = function(cls, ...)
+        local self = setmetatable({}, cls)
+        self:init(...)
+        return self
+    end,
+})
+
+function ColorPair:init(id, fg, bg)
+    self.id = id
+    c_curses.color_pair_init(id, fg, bg)
+end
+
+--------------------------------------------------------------------------------
 
 local curses = {
     Screen = Screen,
-    colors = colors
+    ColorPair = ColorPair
 }
 
 return curses
