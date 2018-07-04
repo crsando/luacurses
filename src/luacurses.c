@@ -34,7 +34,7 @@ static const char *colorNames[] = {
     "COLOR_CYAN",
     "COLOR_WHITE",
     NULL
-}
+};
 
 static const int colorValues[] = {
     COLOR_BLACK,
