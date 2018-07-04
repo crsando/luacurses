@@ -20,12 +20,23 @@ typedef struct {
     bool    colors;
 } _screen_ctx_t;
 
-// TODO: Remove this hacked way of doing colors and add proper color pairs to
-// improve portability on systems that don't support a large number of color
-// pairs.
-int pair = 1;
+typedef struct {
+    short id;
+} _color_pair_ctx_t;
 
-static const int colors[] = {
+static const char colorNames[][] = {
+    "COLOR_BLACK",
+    "COLOR_RED",
+    "COLOR_GREEN",
+    "COLOR_YELLOW",
+    "COLOR_BLUE",
+    "COLOR_MAGENTA",
+    "COLOR_CYAN",
+    "COLOR_WHITE",
+    NULL
+}
+
+static const int colorValues[] = {
     COLOR_BLACK,
     COLOR_RED,
     COLOR_GREEN,
@@ -33,7 +44,8 @@ static const int colors[] = {
     COLOR_BLUE,
     COLOR_MAGENTA,
     COLOR_CYAN,
-    COLOR_WHITE
+    COLOR_WHITE,
+    NULL
 };
 
 int l_screen_init(lua_State *L) {
@@ -153,22 +165,18 @@ int l_screen_setcursor(lua_State *L) {
 }
 
 int l_screen_write(lua_State *L) {
-    _screen_ctx_t *ctx;
+    _screen_ctx_t *screen;
     const char *str;
-    int fg;
-    int bg;
+    _color_pair_ctx_t *color_pair;
 
     assert(lua_isuserdata(L, 1));
-    ctx = lua_touserdata(L, 1);
+    screen = lua_touserdata(L, 1);
     str = luaL_checkstring(L, 2);
-    fg = luaL_checkinteger(L, 3);
-    bg = luaL_checkinteger(L, 4);
+    color_pair = lua_touserdata(L, 3);
 
-    init_pair(pair, colors[fg], colors[bg]);
-    wattron(ctx->window, COLOR_PAIR(pair));
-    waddstr(ctx->window, str);
-    wattroff(ctx->window, COLOR_PAIR(pair));
-    pair++;
+    wattron(screen->window, COLOR_PAIR(color_pair->id));
+    waddstr(screen->window, str);
+    wattroff(screen->window, COLOR_PAIR(color_pair->id));
 
     return 0;
 }
@@ -201,6 +209,21 @@ int l_screen_destroy(lua_State *L) {
     return 0;
 }
 
+int l_color_pair_init(lua_State *L) {
+    _color_pair_ctx_t *ctx;
+    short fg;
+    short bg;
+
+    ctx = lua_newuserdata(L, sizeof(*ctx));
+    ctx->id = (short) luaL_checkinteger(L, 1);
+    fg = (short) luaL_checkinteger(L, 2);
+    bg = (short) luaL_checkinteger(L, 3);
+
+    init_pair(ctx->id, fg, bg);
+
+    return 1;
+}
+
 // TODO: Add methods that allow configuring echo and other such properties of
 // the screen.
 static const struct luaL_Reg c_curses[] = {
@@ -215,10 +238,21 @@ static const struct luaL_Reg c_curses[] = {
     {"screen_clear",        l_screen_clear},
     {"screen_refresh",      l_screen_refresh},
     {"screen_destroy",      l_screen_destroy},
+    {"color_pair_init",     l_color_pair_init},
     {NULL, NULL}
 };
 
 int luaopen_c_curses(lua_State *L) {
+    // Load the functions.
     luaL_newlib(L, c_curses);
+
+    // Load the color constants.
+    for(int i = 0; colorNames[i + 1] != NULL; i++) {
+        lua_newtable(L);
+        lua_pushstring(L, colorNames[i]);
+        lua_pushinteger(L, colorValues[i]);
+        lua_settable(L, -3);
+    }
+
     return 1;
 }
