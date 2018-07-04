@@ -24,7 +24,7 @@ typedef struct {
     short id;
 } _color_pair_ctx_t;
 
-static const char colorNames[][] = {
+static const char *colorNames[] = {
     "COLOR_BLACK",
     "COLOR_RED",
     "COLOR_GREEN",
@@ -247,8 +247,7 @@ int luaopen_c_curses(lua_State *L) {
     luaL_newlib(L, c_curses);
 
     // Load the color constants.
-    for(int i = 0; colorNames[i + 1] != NULL; i++) {
-        lua_newtable(L);
+    for(int i = 0; colorNames[i] != NULL; i++) {
         lua_pushstring(L, colorNames[i]);
         lua_pushinteger(L, colorValues[i]);
         lua_settable(L, -3);
