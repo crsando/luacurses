@@ -163,9 +163,9 @@ int l_write(lua_State *L) {
 
     short id = colors_to_pair(fg, bg);
 
-    wattron(screen->window, COLOR_PAIR(id));
-    waddstr(screen->window, str);
-    wattroff(screen->window, COLOR_PAIR(id));
+    wattron(ctx->window, COLOR_PAIR(id));
+    waddstr(ctx->window, str);
+    wattroff(ctx->window, COLOR_PAIR(id));
 
     return 0;
 }
