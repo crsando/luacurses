@@ -35,7 +35,7 @@ static const _color_t colors[] = {
     {"COLOR_MAGENTA",   COLOR_MAGENTA},
     {"COLOR_CYAN",      COLOR_CYAN},
     {"COLOR_WHITE",     COLOR_WHITE}
-}
+};
 
 /**
  * Returns the ID of a color pair given the foreground and background colors. If
