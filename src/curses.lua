@@ -21,74 +21,55 @@ setmetatable(Screen, {
 })
 
 function Screen:init()
-    self.ctx = c_curses.screen_init();
+    self.ctx = c_curses.init();
 end
 
 function Screen:read(n, blocking)
     if blocking == nil then blocking = true end
-    return c_curses.screen_read(self.ctx, n, blocking)
+    return c_curses.read(self.ctx, n, blocking)
 end
 
 function Screen:readline(blocking)
     if blocking == nil then blocking = true end
-    return c_curses.screen_readline(self.ctx, blocking)
+    return c_curses.readline(self.ctx, blocking)
 end
 
 function Screen:iscolor()
-    return c_curses.screen_iscolor(self.ctx)
+    return c_curses.iscolor(self.ctx)
 end
 
 function Screen:getsize()
-    return c_curses.screen_getsize(self.ctx)
+    return c_curses.getsize(self.ctx)
 end
 
 function Screen:getcursor()
-    return c_curses.screen_getcursor(self.ctx)
+    return c_curses.getcursor(self.ctx)
 end
 
 function Screen:setcursor(x, y)
-    c_curses.screen_setcursor(self.ctx, x, y)
+    c_curses.setcursor(self.ctx, x, y)
 end
 
-function Screen:write(string, color_pair)
-    c_curses.screen_write(self.ctx, string, color_pair.id)
+function Screen:write(string, fg, bg)
+    c_curses.write(self.ctx, string, fg, bg)
 end
 
 function Screen:clear()
-    c_curses.screen_clear(self.ctx)
+    c_curses.clear(self.ctx)
 end
 
 function Screen:refresh()
-    c_curses.screen_refresh(self.ctx)
+    c_curses.refresh(self.ctx)
 end
 
 function Screen:destroy()
-    c_curses.screen_destroy()
-end
-
---------------------------------------------------------------------------------
-
-local ColorPair = {}
-ColorPair.__index = ColorPair
-
-setmetatable(ColorPair, {
-    __call = function(cls, ...)
-        local self = setmetatable({}, cls)
-        self:init(...)
-        return self
-    end,
-})
-
-function ColorPair:init(id, fg, bg)
-    self.id = id
-    c_curses.color_pair_init(id, fg, bg)
+    c_curses.destroy()
 end
 
 --------------------------------------------------------------------------------
 
 local curses = {
-    Screen = Screen,
-    ColorPair = ColorPair
+    Screen = Screen
 }
 
 return curses
