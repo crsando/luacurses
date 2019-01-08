@@ -3,6 +3,9 @@ LUA_INCLUDE = /usr/include/lua5.3
 SRC_DIR = src
 OBJ_DIR = obj
 
+SRC = $(wildcard $(SRC_DIR)/*.c)
+OBJ = $(SRC:*.c=*.o)
+
 CPPFLAGS += -I$(LUA_INCLUDE)
 
 CFLAGS += -fPIC -Wall -Wextra
