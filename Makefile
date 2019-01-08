@@ -16,7 +16,7 @@ LFLAGS += -llua5.3 -lcurses
 all: dirs obj/libcurses.so obj/libcurses.a
 
 dirs:
-	$(MKDIR) -p obj/
+	mkdir -p obj/
 
 obj/libcurses.so: $(OBJ)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LFLAGS) -shared -o $@ $^
