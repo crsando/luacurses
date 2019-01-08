@@ -70,6 +70,7 @@ end
 
 local curses = {
     Screen = Screen
+    colors = c_curses.colors
 }
 
 return curses
