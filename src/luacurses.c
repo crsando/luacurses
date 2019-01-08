@@ -19,6 +19,7 @@
 typedef struct {
     WINDOW *window;
     bool    isColor;
+    bool    isActive;
 } _screen_ctx_t;
 
 typedef struct {
@@ -60,6 +61,7 @@ int l_init(lua_State *L) {
     _screen_ctx_t *ctx = lua_newuserdata(L, sizeof(*ctx));
     ctx->window = initscr();
     ctx->isColor = has_colors();
+    ctx->isActive = true;
 
     if(ctx->isColor) {
         start_color();
@@ -109,6 +111,15 @@ int l_iscolor(lua_State *L) {
     _screen_ctx_t *ctx = lua_touserdata(L, 1);
 
     lua_pushboolean(L, ctx->isColor);
+
+    return 1;
+}
+
+int l_isactive(lua_State *L) {
+    assert(lua_isuserdata(L, 1));
+    _screen_ctx_t *ctx = lua_touserdata(L, 1);
+
+    lua_pushboolean(L, ctx->isActive);
 
     return 1;
 }
@@ -189,7 +200,12 @@ int l_refresh(lua_State *L) {
 }
 
 int l_destroy(lua_State *L) {
+    assert(lua_isuserdata(L, 1));
+    _screen_ctx_t *ctx = lua_touserdata(L, 1);
+
     endwin();
+
+    ctx->isActive = false;
 
     return 0;
 }
