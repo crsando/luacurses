@@ -3,8 +3,8 @@ LUA_INCLUDE = /usr/include/lua5.3
 SRC_DIR = src
 OBJ_DIR = obj
 
-SRC = $(wildcard $(SRC_DIR)/*.c)
-OBJ = $(SRC:*.c=*.o)
+SRC := $(wildcard $(SRC_DIR)/*.c)
+OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 CPPFLAGS += -I$(LUA_INCLUDE)
 
@@ -22,7 +22,7 @@ obj/libcurses.a: $(OBJ)
 	ar rcs $@ $^
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@ 
 
 clean:
 	$(RM) -rf $(OBJ_DIR)/*
