@@ -227,9 +227,13 @@ static const struct luaL_Reg c_curses[] = {
     {NULL, NULL}
 };
 
-int luaopen_c_curses(lua_State *L) {
+int luaopen_ccurses(lua_State *L) {
     // Load the functions.
-    luaL_newlib(L, c_curses);
+    // luaL_newlib(L, c_curses);
+    luaL_register(L, "ccurses", c_curses);
+
+    lua_pushstring(L, "colors");
+    lua_newtable(L);
 
     // Load the color constants.
     for(int i = 0; i < NUM_COLORS; i++) {
@@ -237,6 +241,8 @@ int luaopen_c_curses(lua_State *L) {
         lua_pushinteger(L, colors[i].id);
         lua_settable(L, -3);
     }
+
+    lua_settable(L, -3);
 
     return 1;
 }

@@ -5,7 +5,7 @@
 --! @brief object oriented wrapper for curses.
 ----------------------------------------------
 
-c_curses = require("c_curses")
+c_curses = require("ccurses")
 
 --------------------------------------------------------------------------------
 
@@ -63,14 +63,22 @@ function Screen:refresh()
 end
 
 function Screen:destroy()
-    c_curses.destroy()
+    c_curses.destroy(self.ctx)
 end
 
 --------------------------------------------------------------------------------
 
+local colors = {}
+for k, v in pairs(c_curses.colors) do 
+    local nk = string.gsub(k, "^COLOR%_", "")
+    colors[nk] = v
+end
+
+
 local curses = {
-    Screen = Screen
-    colors = c_curses.colors
+    Screen = Screen,
+    colors = colors,
+    color = colors, -- alias
 }
 
 return curses
